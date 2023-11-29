@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZAC: Einsendeaufgabe Template</title>
+    <script type="text/javascript">
+        window.addEventListener('load', canvasApp, false);
+
+        function canvasApp() {
+            if (!document.createElement('canvas').getContext) {
+                return;
+            }
+
+            var theCanvas = document.getElementById('canvas');
+            var context = theCanvas.getContext('2d');
+
+            drawCanvas();
+
+            function drawCanvas() {
+
+                //Hintergrundfarbe
+                var bgColor = '#434b57';
+                //Strahlenfarbe
+                var beamColor = 'rgb(255, 117, 117)';
+
+                //Sonnenfarbe
+                var sunColor = "#e6d9b1";
+
+                var canvasWidth = 460;
+                var canvasHeight = 360;
+
+                //Zentrumsposition der Sonne
+                var sunX = 400;
+                var sunY = 160;
+
+                //Radius der Sonne
+                var sunRadius = 81;
+
+                //Strahlenlänge
+                var beamWidth = 460;
+
+                //Strahlendicke
+                var beamThickness = 2;
+
+                //Winkel-Offset pro Strahl
+                var rotStep = 7.5;
+
+                //Anzahl zu zeichnender Strahlen
+                var beamNum = Math.floor(360 / rotStep);
+
+                //Zeichencode einfügen
+
+                //Canvas Hintergrund zeichnen
+                context.fillStyle = bgColor;
+                context.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                //Sonne zeichnen
+                context.fillStyle = sunColor;
+                context.beginPath();
+                context.arc(sunX, sunY, sunRadius, 0, 2 * Math.PI);
+                context.fill();
+                
+                // Strahlen zeichnen
+                context.strokeStyle = beamColor;
+                context.lineWidth = beamThickness;
+
+                for (var i = 0; i < beamNum; i++) {
+                    var angle = i * rotStep * (Math.PI / 180); // Bogenmaß
+                    var startX = sunX + sunRadius * Math.cos(angle);
+                    var startY = sunY + sunRadius * Math.sin(angle);
+                    var endX = sunX + (sunRadius + beamWidth) * Math.cos(angle);
+                    var endY = sunY + (sunRadius + beamWidth) * Math.sin(angle);
+
+                    var gradient = context.createLinearGradient(startX, startY, endX, endY);
+                        gradient.addColorStop(0, 'rgba(255, 117, 117, 1)'); // 100% Intensität
+                        gradient.addColorStop(0.3, 'rgba(255, 117, 117, 0.4)'); // Transparenzanpassung
+                        gradient.addColorStop(0.5, 'rgba(255, 117, 117, 0.2)'); // Transparenzanpassung
+                        gradient.addColorStop(0.7, 'rgba(255, 117, 117, 0)'); // 0% Intensität
+
+                context.strokeStyle = gradient;
+            	context.lineWidth = beamThickness;
+
+                context.beginPath();
+                context.moveTo(startX, startY);
+                context.lineTo(endX, endY);
+                context.stroke();
+                
+            }
+        }   
+    }
+
+
+        
+        
+
+    </script>
+</head>
+<body>
+<div style="position: absolute;">
+    <canvas id="canvas" width="460" height="360">
+        Your browser does not support the HTML 5 Canvas.
+    </canvas>
+</div>
+
+</body>
+</html>
